@@ -1,0 +1,16 @@
+[package]
+name = "diesel-connection"
+version = "1.0.0"
+edition = "2018"
+description = "Static diesel r2d2 connection pooling."
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/Bajix/booter-rs/"
+keywords = ["diesel","r2d2","postgres"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+diesel = { version = "1.4.6", features = ["postgres", "r2d2"] }
+once_cell = "1.7.2"
+booter = "1.0.1"
