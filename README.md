@@ -9,6 +9,8 @@ Static diesel r2d2 connection pooling.
 `DATABASE_URL` env sets postgres database url within connection manager
 `MAX_DB_CONNECTIONS` env sets max postgres connections within connection pool
 
+This library uses [booter::boot()](https://docs.rs/booter/latest/booter/fn.boot.html) to initialize.
+
 ```rust
 #[actix_rt::main]
 async fn main() -> Result<(), PoolError> {

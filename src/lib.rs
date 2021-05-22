@@ -4,6 +4,8 @@
 //!
 //! `MAX_DB_CONNECTIONS` env sets max postgres connections within connection pool
 //!
+//! This library uses [booter::boot()](https://docs.rs/booter/latest/booter/fn.boot.html) to initialize.
+//! 
 //! ```rust
 //!
 //! #[actix_rt::main]
