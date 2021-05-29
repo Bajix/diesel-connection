@@ -5,7 +5,7 @@
 //! `MAX_DB_CONNECTIONS` env sets max postgres connections within connection pool
 //!
 //! This library uses [booter::boot()](https://docs.rs/booter/latest/booter/fn.boot.html) to initialize.
-//! 
+//!
 //! ```rust
 //!
 //! #[actix_rt::main]
@@ -19,13 +19,21 @@
 //! }
 //! ```
 
-use diesel::pg::PgConnection;
+#[cfg(feature = "mysql")]
+pub type Connection = diesel::mysql::MysqlConnection;
+
+#[cfg(feature = "postgres")]
+pub type Connection = diesel::pg::PgConnection;
+
+#[cfg(feature = "sqlite")]
+pub type Connection = diesel::sqlite::SqliteConnection;
+
 pub use diesel::r2d2::PoolError;
 use diesel::r2d2::{self, ConnectionManager};
 use once_cell::sync::OnceCell;
 
-pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
-pub type PooledConnection = r2d2::PooledConnection<ConnectionManager<PgConnection>>;
+pub type Pool = r2d2::Pool<ConnectionManager<Connection>>;
+pub type PooledConnection = r2d2::PooledConnection<ConnectionManager<Connection>>;
 
 static POOL: OnceCell<Pool> = OnceCell::new();
 
@@ -35,7 +43,7 @@ booter::call_on_boot!({
     .unwrap_or_else(|_| String::from("20"))
     .parse::<u32>()
     .unwrap();
-  let connection_manager = ConnectionManager::<PgConnection>::new(database_url);
+  let connection_manager = ConnectionManager::<Connection>::new(database_url);
 
   let connection_pool = r2d2::Pool::builder()
     .max_size(max_connections)
