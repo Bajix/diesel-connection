@@ -7,15 +7,18 @@
 //! This library uses [booter::boot()](https://docs.rs/booter/latest/booter/fn.boot.html) to initialize.
 //!
 //! ```rust
+//!   use diesel_connection::{get_connection, PoolError};
 //!
-//! #[actix_rt::main]
-//! async fn main() -> Result<(), PoolError> {
+//!   fn main() -> Result<(), PoolError> {
+//!
 //!   // Env can be configured before booter::boot giving fine-grain initialization control
-//!   dotenv().expect("Unable to load .env file");
-//!   env_logger::init();
+//!   //dotenv().expect("Unable to load .env file");
+//!
 //!   // This calls registered initialization functions; i.e. to initialize our pool
 //!   booter::boot();
+//!
 //!   let conn = get_connection()?;
+//!   Ok(())
 //! }
 //! ```
 
@@ -39,6 +42,7 @@ static POOL: OnceCell<Pool> = OnceCell::new();
 
 booter::call_on_boot!({
   let database_url = std::env::var("DATABASE_URL").expect("missing DATABASE_URL env variable");
+
   let max_connections = std::env::var("MAX_DB_CONNECTIONS")
     .unwrap_or_else(|_| String::from("20"))
     .parse::<u32>()
