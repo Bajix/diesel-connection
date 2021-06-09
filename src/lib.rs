@@ -23,12 +23,30 @@
 //! ```
 
 #[cfg(feature = "mysql")]
-pub type Connection = diesel::mysql::MysqlConnection;
+pub type Backend = diesel::mysql::Mysql;
 
 #[cfg(feature = "postgres")]
-pub type Connection = diesel::pg::PgConnection;
+pub type Backend = diesel::pg::Pg;
 
 #[cfg(feature = "sqlite")]
+pub type Backend = diesel::sqlite::Sqlite;
+
+#[cfg(all(feature = "tracing", feature = "mysql"))]
+pub type Connection = diesel_tracing::mysql::InstrumentedMysqlConnection;
+
+#[cfg(all(not(feature = "tracing"), feature = "mysql"))]
+pub type Connection = diesel::mysql::MysqlConnection;
+
+#[cfg(all(feature = "tracing", feature = "postgres"))]
+pub type Connection = diesel_tracing::pg::InstrumentedPgConnection;
+
+#[cfg(all(not(feature = "tracing"), feature = "postgres"))]
+pub type Connection = diesel::pg::PgConnection;
+
+#[cfg(all(feature = "tracing", feature = "sqlite"))]
+pub type Connection = diesel_tracing::sqlite::InstrumentedSqliteConnection;
+
+#[cfg(all(not(feature = "tracing"), feature = "sqlite"))]
 pub type Connection = diesel::sqlite::SqliteConnection;
 
 pub use diesel::r2d2::PoolError;

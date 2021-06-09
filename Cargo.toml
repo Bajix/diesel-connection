@@ -15,10 +15,12 @@ diesel = { version = "1.4.7", features = ["r2d2"] }
 once_cell = "1.8.0"
 booter = "1.1.1"
 inventory = "0.1.10"
+diesel-tracing = { version = "0.1.4", optional = true }
 
 [features]
 default = ["postgres"]
-mysql = ["diesel/mysql"]
-postgres = ["diesel/postgres"]
-sqlite = ["diesel/sqlite"]
+tracing = ["diesel-tracing"]
+mysql = ["diesel/mysql", "diesel-tracing/mysql"]
+postgres = ["diesel/postgres", "diesel-tracing/postgres"]
+sqlite = ["diesel/sqlite", "diesel-tracing/sqlite"]
 
