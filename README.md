@@ -11,6 +11,8 @@ Static diesel r2d2 connection pooling.
 
 This library uses [booter::boot()](https://docs.rs/booter/latest/booter/fn.boot.html) to initialize.
 
+The `tracing` feature flag substitutes connections instrumented with opentelemetry. See [diesel-tracing](https://crates.io/crates/diesel-tracing) for details.
+
 ```rust
 #[actix_rt::main]
 async fn main() -> Result<(), PoolError> {
