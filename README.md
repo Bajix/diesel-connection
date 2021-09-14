@@ -9,18 +9,15 @@ Static diesel r2d2 connection pooling.
 `DATABASE_URL` env sets postgres database url within connection manager
 `MAX_DB_CONNECTIONS` env sets max postgres connections within connection pool
 
-This library uses [booter::boot()](https://docs.rs/booter/latest/booter/fn.boot.html) to initialize.
-
 The `tracing` feature flag substitutes connections instrumented with opentelemetry. See [diesel-tracing](https://crates.io/crates/diesel-tracing) for details.
 
 ```rust
 #[actix_rt::main]
 async fn main() -> Result<(), PoolError> {
-  // Env can be configured before booter::boot giving fine-grain initialization control
+  // DATABASE_URL can be set any time before the pool is lazily initialized on first use
   dotenv().expect("Unable to load .env file");
   env_logger::init();
-  // This calls registered initialization functions; with this we initialize our static connection pool
-  booter::boot();
+
   let conn = get_connection()?;
 }
 ```
