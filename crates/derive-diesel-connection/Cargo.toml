@@ -1,0 +1,18 @@
+[package]
+name = "derive-diesel-connection"
+authors = ["Thomas Sieverding <Thomas@bajix.com>"]
+edition = "2021"
+version = "2.0.0-rc.0"
+description = "Derives for diesel-connection"
+readme = "../../README.md"
+license = "MIT"
+repository = "https://github.com/Bajix/diesel-connection/"
+
+[lib]
+doctest = false
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1"
+quote = "1"
+syn = { version = "1", features = [] }
