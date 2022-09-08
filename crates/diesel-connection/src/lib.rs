@@ -6,8 +6,6 @@
 //!
 //! The `dotenv` feature flag enables automatic at-most-once dotenv loading via dotenvy. This is necessary because pool statics are initialized pre-main via [static_init](https://crates.io/crates/static_init).
 //!
-//! The `tracing` feature flag substitutes connections instrumented with opentelemetry. See [diesel-tracing](https://crates.io/crates/diesel-tracing) for details.
-//!
 //! ```rust
 //! use diesel_connection::{pg::get_connection, PoolError};
 //!
@@ -119,12 +117,7 @@ cfg_block! {
 pub mod mysql {
   use super::*;
 
-  #[cfg(feature = "tracing")]
-  pub type Connection = diesel_tracing::mysql::InstrumentedMysqlConnection;
-
-  #[cfg(not(feature = "tracing"))]
   pub type Connection = diesel::mysql::MysqlConnection;
-
   pub type PooledConnection = r2d2::PooledConnection<ConnectionManager<Connection>>;
 }
 
@@ -133,12 +126,7 @@ pub mod mysql {
 pub mod pg {
   use super::*;
 
-  #[cfg(feature = "tracing")]
-  pub type Connection = diesel_tracing::pg::InstrumentedPgConnection;
-
-  #[cfg(not(feature = "tracing"))]
   pub type Connection = diesel::pg::PgConnection;
-
   pub type PooledConnection = r2d2::PooledConnection<ConnectionManager<Connection>>;
 }
 
@@ -147,11 +135,6 @@ pub mod pg {
 pub mod sqlite {
   use super::*;
 
-  #[cfg(feature = "tracing")]
-  pub type Connection = diesel_tracing::sqlite::InstrumentedSqliteConnection;
-
-  #[cfg(not(feature = "tracing"))]
   pub type Connection = diesel::sqlite::SqliteConnection;
-
   pub type PooledConnection = r2d2::PooledConnection<ConnectionManager<Connection>>;
 }

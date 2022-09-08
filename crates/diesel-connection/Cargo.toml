@@ -16,7 +16,6 @@ doctest = false
 cfg_block = "0.1.1"
 derive-diesel-connection = { "version" = "2.0.0", path = "../derive-diesel-connection"}
 diesel = { version = "1.4", features = ["r2d2"] }
-diesel-tracing = { version = "0.1.6", optional = true }
 dotenvy = { version = "0.15.1", optional = true }
 env-url = "2.0.3"
 static_init = "1.0.2"
@@ -28,7 +27,6 @@ diesel = { version = "1.4", features = ["r2d2", "mysql", "postgres", "sqlite"] }
 default = ["postgres"]
 doc = ["mysql", "postgres", "sqlite"]
 dotenv = ["dotenvy"]
-tracing = ["diesel-tracing"]
-mysql = ["diesel/mysql", "diesel-tracing/mysql"]
-postgres = ["diesel/postgres", "diesel-tracing/postgres"]
-sqlite = ["diesel/sqlite", "diesel-tracing/sqlite"]
+mysql = ["diesel/mysql"]
+postgres = ["diesel/postgres"]
+sqlite = ["diesel/sqlite"]

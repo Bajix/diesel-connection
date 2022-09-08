@@ -12,8 +12,6 @@ Connection urls are provided by environment variables using [env-url](https://cr
 
 The `dotenv` feature flag enables automatic at-most-once dotenv loading via dotenvy. This is necessary because pool statics are initialized pre-main via [static_init](https://crates.io/crates/static_init).
 
-The `tracing` feature flag substitutes connections instrumented with opentelemetry. See [diesel-tracing](https://crates.io/crates/diesel-tracing) for details.
-
 ```rust
 use diesel_connection::{pg::get_connection, PoolError};
 
