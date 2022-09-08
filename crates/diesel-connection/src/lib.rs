@@ -1,9 +1,28 @@
 //! Static diesel r2d2 connection pooling with env configuration
+//!
+//! Connection urls are provided by environment variables using [env-url](https://crates.io/crates/env-url) using the env variable `DATABASE_URL`.
+//!
+//! `MAX_DB_CONNECTIONS` env sets max connections within connection pool
+//!
+//! The `dotenv` feature flag enables automatic at-most-once dotenv loading via dotenvy. This is necessary because pool statics are initialized pre-main via [static_init](https://crates.io/crates/static_init).
+//!
+//! The `tracing` feature flag substitutes connections instrumented with opentelemetry. See [diesel-tracing](https://crates.io/crates/diesel-tracing) for details.
+//!
+//! ```rust
+//! use diesel_connection::{pg::get_connection, PoolError};
+//!
+//! #[actix_rt::main]
+//! async fn main() -> Result<(), PoolError> {
+//!   let conn = get_connection()?;
+//! }
+//! ```
+
 #![feature(doc_cfg)]
 #![allow(rustdoc::private_intra_doc_links)]
 extern crate self as diesel_connection;
 #[doc(hidden)]
 pub extern crate static_init;
+use cfg_block::cfg_block;
 pub use derive_diesel_connection::StaticConnectionPool;
 use diesel::{
   r2d2::{self, ConnectionManager, PoolError},
@@ -26,9 +45,11 @@ pub trait ConnectionInfo: ServiceURL {
 
     let connection_manager: ConnectionManager<Self::Connection> =
       ConnectionManager::new(database_url);
+
     let pool = r2d2::Pool::builder()
       .max_size(max_connections)
       .build_unchecked(connection_manager);
+
     Ok(pool)
   }
 }
@@ -40,6 +61,56 @@ pub trait StaticPoolContext: ConnectionInfo {
   fn get_connection(
   ) -> Result<r2d2::PooledConnection<ConnectionManager<Self::Connection>>, PoolError> {
     <Self as StaticPoolContext>::pool().get()
+  }
+}
+
+cfg_block! {
+  #[cfg(any(doc, all(feature = "postgres", not(feature = "mysql"), not(feature = "sqlite"))))] {
+    #[derive(EnvURL, StaticConnectionPool)]
+    #[env_url(env_prefix = "DATABASE", default = "postgresql://localhost:5432")]
+    /// Static connection pool type
+    pub struct ConnectionPool;
+
+    impl ConnectionInfo for ConnectionPool {
+      type Connection = pg::Connection;
+    }
+
+    /// Get postgress connection from pool. Use `DATABASE_URL` env variable to set connection url
+    pub fn get_connection() -> Result<pg::PooledConnection, PoolError> {
+      <ConnectionPool as StaticPoolContext>::get_connection()
+    }
+  }
+
+  #[cfg(all(feature = "mysql", not(feature = "postgres"), not(feature = "sqlite")))] {
+    #[derive(EnvURL, StaticConnectionPool)]
+    #[env_url(env_prefix = "DATABASE", default = "mysql://localhost:3306")]
+    /// Static connection pool type
+    pub struct ConnectionPool;
+
+    impl ConnectionInfo for ConnectionPool {
+      type Connection = mysql::Connection;
+    }
+
+    /// Get mysql connection from pool. Use `DATABASE_URL` env variable to set connection url
+    pub fn get_connection() -> Result<mysql::PooledConnection, PoolError> {
+      <ConnectionPool as StaticPoolContext>::get_connection()
+    }
+  }
+
+  #[cfg(all(feature = "sqlite", not(feature = "mysql"), not(feature = "postgres")))] {
+    #[derive(EnvURL, StaticConnectionPool)]
+    #[env_url(env_prefix = "DATABASE", default = "mysql://localhost:3306")]
+    /// Static connection pool type
+    pub struct ConnectionPool;
+
+    impl ConnectionInfo for ConnectionPool {
+      type Connection = sqlite::Connection;
+    }
+
+    /// Get sqlite connection from pool. Use `DATABASE_URL` env variable to set connection url
+    pub fn get_connection() -> Result<sqlite::PooledConnection, PoolError> {
+      <ConnectionPool as StaticPoolContext>::get_connection()
+    }
   }
 }
 
@@ -55,19 +126,6 @@ pub mod mysql {
   pub type Connection = diesel::mysql::MysqlConnection;
 
   pub type PooledConnection = r2d2::PooledConnection<ConnectionManager<Connection>>;
-
-  #[derive(EnvURL, StaticConnectionPool)]
-  #[env_url(env_prefix = "MYSQL", default = "mysql://localhost:3306")]
-  pub struct ConnectionPool;
-
-  impl ConnectionInfo for ConnectionPool {
-    type Connection = Connection;
-  }
-
-  /// Get mysql connection from pool. Use `MYSQL_URL` env variable to set connection url
-  pub fn get_connection() -> Result<PooledConnection, PoolError> {
-    <ConnectionPool as StaticPoolContext>::get_connection()
-  }
 }
 
 /// Types for Postgres connections. Enable via `postgres` feature flag
@@ -82,19 +140,6 @@ pub mod pg {
   pub type Connection = diesel::pg::PgConnection;
 
   pub type PooledConnection = r2d2::PooledConnection<ConnectionManager<Connection>>;
-
-  #[derive(EnvURL, StaticConnectionPool)]
-  #[env_url(env_prefix = "PG", default = "postgresql://localhost:5432")]
-  pub struct ConnectionPool;
-
-  impl ConnectionInfo for ConnectionPool {
-    type Connection = Connection;
-  }
-
-  /// Get mysql connection from pool. Use `PG_URL` env variable to set connection url
-  pub fn get_connection() -> Result<PooledConnection, PoolError> {
-    <ConnectionPool as StaticPoolContext>::get_connection()
-  }
 }
 
 /// Types for SQLite connections. Enable via `sqlite` feature flag
@@ -109,17 +154,4 @@ pub mod sqlite {
   pub type Connection = diesel::sqlite::SqliteConnection;
 
   pub type PooledConnection = r2d2::PooledConnection<ConnectionManager<Connection>>;
-
-  #[derive(EnvURL, StaticConnectionPool)]
-  #[env_url(env_prefix = "SQLITE", default = "sqlite://./db.sqlite")]
-  pub struct ConnectionPool;
-
-  impl ConnectionInfo for ConnectionPool {
-    type Connection = Connection;
-  }
-
-  /// Get sqlite connection from pool. Use `SQLITE_URL` env variable to set connection url
-  pub fn get_connection() -> Result<PooledConnection, PoolError> {
-    <ConnectionPool as StaticPoolContext>::get_connection()
-  }
 }

@@ -6,7 +6,7 @@
 
 Static diesel r2d2 connection pooling.
 
-Connection urls are provided by environment variables using [env-url](https://crates.io/crates/env-url) with env prefixes by database type; ie postgres is `POSTGRES_URL`.
+Connection urls are provided by environment variables using [env-url](https://crates.io/crates/env-url) using the env variable `DATABASE_URL`.
 
 `MAX_DB_CONNECTIONS` env sets max connections within connection pool
 

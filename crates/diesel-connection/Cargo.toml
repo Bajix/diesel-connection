@@ -13,6 +13,7 @@ keywords = ["diesel","r2d2","postgres"]
 doctest = false
 
 [dependencies]
+cfg_block = "0.1.1"
 derive-diesel-connection = { "version" = "2.0.0-rc.0", path = "../derive-diesel-connection"}
 diesel = { version = "1.4", features = ["r2d2"] }
 diesel-tracing = { version = "0.1.6", optional = true }
@@ -24,7 +25,7 @@ static_init = "1.0.2"
 diesel = { version = "1.4", features = ["r2d2", "mysql", "postgres", "sqlite"] }
 
 [features]
-default = []
+default = ["postgres"]
 doc = ["mysql", "postgres", "sqlite"]
 dotenv = ["dotenvy"]
 tracing = ["diesel-tracing"]
