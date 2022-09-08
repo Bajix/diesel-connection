@@ -22,13 +22,10 @@ extern crate self as diesel_connection;
 pub extern crate static_init;
 use cfg_block::cfg_block;
 pub use derive_diesel_connection::StaticConnectionPool;
-use diesel::{
-  r2d2::{self, ConnectionManager, PoolError},
-  Connection,
-};
+use diesel::r2d2::{self, ConnectionManager, PoolError, R2D2Connection};
 use env_url::*;
 pub trait ConnectionInfo: ServiceURL {
-  type Connection: Connection + 'static;
+  type Connection: R2D2Connection + 'static;
 
   fn create_pool() -> Result<r2d2::Pool<ConnectionManager<Self::Connection>>, ParseError> {
     #[cfg(feature = "dotenv")]

@@ -15,13 +15,13 @@ doctest = false
 [dependencies]
 cfg_block = "0.1.1"
 derive-diesel-connection = { "version" = "2.0.0", path = "../derive-diesel-connection"}
-diesel = { version = "1.4", features = ["r2d2"] }
+diesel = { version = "2.0.0", features = ["r2d2"] }
 dotenvy = { version = "0.15.1", optional = true }
 env-url = "2.0.3"
 static_init = "1.0.2"
 
 [dev-dependencies]
-diesel = { version = "1.4", features = ["r2d2", "mysql", "postgres", "sqlite"] }
+diesel = { version = "2.0.0", features = ["r2d2", "mysql", "postgres", "sqlite"] }
 
 [features]
 default = ["postgres"]
