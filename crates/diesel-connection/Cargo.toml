@@ -1,6 +1,6 @@
 [package]
 name = "diesel-connection"
-version = "3.0.0"
+version = "3.0.1"
 edition = "2021"
 description = "Static diesel r2d2 connection pooling."
 readme = "../../README.md"

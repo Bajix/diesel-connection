@@ -94,7 +94,7 @@ cfg_block! {
 
   #[cfg(all(feature = "sqlite", not(feature = "mysql"), not(feature = "postgres")))] {
     #[derive(EnvURL, StaticConnectionPool)]
-    #[env_url(env_prefix = "DATABASE", default = "mysql://localhost:3306")]
+    #[env_url(env_prefix = "DATABASE", default = "sqlite://./db.sqlite")]
     /// Static connection pool type
     pub struct ConnectionPool;
 
