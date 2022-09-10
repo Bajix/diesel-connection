@@ -1,6 +1,6 @@
 [package]
 name = "diesel-connection"
-version = "3.0.1"
+version = "3.0.2"
 edition = "2021"
 description = "Static diesel r2d2 connection pooling."
 readme = "../../README.md"
@@ -15,13 +15,13 @@ doctest = false
 [dependencies]
 cfg_block = "0.1.1"
 derive-diesel-connection = { "version" = "2.0.0", path = "../derive-diesel-connection"}
-diesel = { version = "2.0.0", features = ["r2d2"] }
-dotenvy = { version = "0.15.1", optional = true }
+diesel = { version = "~2.0", features = ["r2d2"] }
+dotenvy = { version = "0.15.3", optional = true }
 env-url = "2.0.3"
-static_init = "1.0.2"
+static_init = "1.0.3"
 
 [dev-dependencies]
-diesel = { version = "2.0.0", features = ["r2d2", "mysql", "postgres", "sqlite"] }
+diesel = { version = "~2.0", features = ["r2d2", "mysql", "postgres", "sqlite"] }
 
 [features]
 default = ["postgres"]
