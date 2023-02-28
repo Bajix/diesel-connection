@@ -6,7 +6,7 @@ description = "Static diesel r2d2 connection pooling."
 readme = "../../README.md"
 license = "MIT"
 repository = "https://github.com/Bajix/diesel-connection/"
-keywords = ["diesel","r2d2","postgres"]
+keywords = ["diesel", "r2d2", "postgres"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
@@ -14,14 +14,19 @@ doctest = false
 
 [dependencies]
 cfg_block = "0.1.1"
-derive-diesel-connection = { "version" = "2.0.0", path = "../derive-diesel-connection"}
+derive-diesel-connection = { "version" = "2.0.0", path = "../derive-diesel-connection" }
 diesel = { version = "~2.0", features = ["r2d2"] }
-dotenvy = { version = "0.15.3", optional = true }
+dotenvy = { version = "0.15", optional = true }
 env-url = "2.0.3"
 static_init = "1.0.3"
 
 [dev-dependencies]
-diesel = { version = "~2.0", features = ["r2d2", "mysql", "postgres", "sqlite"] }
+diesel = { version = "~2.0", features = [
+  "r2d2",
+  "mysql",
+  "postgres",
+  "sqlite",
+] }
 
 [features]
 default = ["postgres"]
