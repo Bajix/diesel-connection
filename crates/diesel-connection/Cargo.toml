@@ -1,6 +1,6 @@
 [package]
 name = "diesel-connection"
-version = "3.0.2"
+version = "4.0.0"
 edition = "2021"
 description = "Static diesel r2d2 connection pooling."
 readme = "../../README.md"
@@ -14,7 +14,7 @@ doctest = false
 
 [dependencies]
 cfg_block = "0.1.1"
-derive-diesel-connection = { "version" = "2.0.0", path = "../derive-diesel-connection" }
+derive-diesel-connection = { "version" = "4.0.0", path = "../derive-diesel-connection" }
 diesel = { version = "~2.0", features = ["r2d2"] }
 dotenvy = { version = "0.15", optional = true }
 env-url = "2.0.3"
