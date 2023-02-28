@@ -1,6 +1,16 @@
 //! Static diesel r2d2 connection pooling with env configuration
 //!
-//! Connection urls are provided by environment variables using [env-url](https://crates.io/crates/env-url) using the env variable `DATABASE_URL`.
+//! Composible connection urls are provided by environment variables using [env-url](https://crates.io/crates/env-url) using the `DATABASE` prefix:
+//!
+//! ```
+//!  | ENV                     |                            |
+//!  | -----------------------:|:--------------------------:|
+//!  | DATABASE_URL            | set connection url         |
+//!  | DATABASE_HOST           | set url host               |
+//!  | DATABASE_PORT           | set url port               |
+//!  | DATABASE_PATH           | set selected database      |
+//!  | DATABASE_USERINFO       | set connnection userinfo   |
+//! ```
 //!
 //! `MAX_DB_CONNECTIONS` env sets max connections within connection pool
 //!
@@ -15,7 +25,7 @@
 //! }
 //! ```
 
-#![feature(doc_cfg)]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 #![allow(rustdoc::private_intra_doc_links)]
 extern crate self as diesel_connection;
 #[doc(hidden)]
@@ -109,8 +119,9 @@ cfg_block! {
   }
 }
 
-/// Types for MySQL connections. Enable via `mysql` feature flag
-#[cfg(any(feature = "mysql", doc))]
+/// Types for MySQL connections.
+#[cfg(any(doc, feature = "mysql"))]
+#[cfg_attr(docsrs, doc(cfg(feature = "mysql")))]
 pub mod mysql {
   use super::*;
 
@@ -118,8 +129,9 @@ pub mod mysql {
   pub type PooledConnection = r2d2::PooledConnection<ConnectionManager<Connection>>;
 }
 
-/// Types for Postgres connections. Enable via `postgres` feature flag
-#[cfg(any(feature = "postgres", doc))]
+/// Types for Postgres connections.
+#[cfg(any(doc, feature = "postgres"))]
+#[cfg_attr(docsrs, doc(cfg(feature = "postgres")))]
 pub mod pg {
   use super::*;
 
@@ -127,8 +139,9 @@ pub mod pg {
   pub type PooledConnection = r2d2::PooledConnection<ConnectionManager<Connection>>;
 }
 
-/// Types for SQLite connections. Enable via `sqlite` feature flag
-#[cfg(any(feature = "sqlite", doc))]
+/// Types for SQLite connections.
+#[cfg(any(doc, feature = "sqlite"))]
+#[cfg_attr(docsrs, doc(cfg(feature = "sqlite")))]
 pub mod sqlite {
   use super::*;
 

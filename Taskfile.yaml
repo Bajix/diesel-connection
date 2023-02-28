@@ -1,0 +1,8 @@
+version: "3"
+
+tasks:
+  doc:
+    cmds:
+      - cargo +nightly doc -p diesel-connection --all-features --open
+    env:
+      RUSTDOCFLAGS: --cfg docsrs

@@ -20,18 +20,14 @@ dotenvy = { version = "0.15", optional = true }
 env-url = "2.0.3"
 static_init = "1.0.3"
 
-[dev-dependencies]
-diesel = { version = "~2.0", features = [
-  "r2d2",
-  "mysql",
-  "postgres",
-  "sqlite",
-] }
-
 [features]
 default = ["postgres"]
-doc = ["mysql", "postgres", "sqlite"]
+# Enable automatic at-most-once dotenv loading via `dotenvy`.
 dotenv = ["dotenvy"]
 mysql = ["diesel/mysql"]
 postgres = ["diesel/postgres"]
 sqlite = ["diesel/sqlite"]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
