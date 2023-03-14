@@ -71,6 +71,8 @@ pub trait PoolContext: ConnectionInfo {
 
 cfg_block! {
   #[cfg(any(doc, all(feature = "postgres", not(feature = "mysql"), not(feature = "sqlite"))))] {
+    pub use pg::PooledConnection;
+
     #[derive(EnvURL, PoolContext)]
     #[env_url(env_prefix = "DATABASE", default = "postgresql://localhost:5432")]
     /// Static connection pool type
@@ -81,12 +83,14 @@ cfg_block! {
     }
 
     /// Get postgress connection from pool. Use `DATABASE_URL` env variable to set connection url
-    pub fn get_connection() -> Result<pg::PooledConnection, PoolError> {
+    pub fn get_connection() -> Result<PooledConnection, PoolError> {
       <ConnectionPool as PoolContext>::get_connection()
     }
   }
 
   #[cfg(all(feature = "mysql", not(feature = "postgres"), not(feature = "sqlite")))] {
+    pub use mysql::PooledConnection;
+
     #[derive(EnvURL, PoolContext)]
     #[env_url(env_prefix = "DATABASE", default = "mysql://localhost:3306")]
     /// Static connection pool type
@@ -97,12 +101,14 @@ cfg_block! {
     }
 
     /// Get mysql connection from pool. Use `DATABASE_URL` env variable to set connection url
-    pub fn get_connection() -> Result<mysql::PooledConnection, PoolError> {
+    pub fn get_connection() -> Result<PooledConnection, PoolError> {
       <ConnectionPool as PoolContext>::get_connection()
     }
   }
 
   #[cfg(all(feature = "sqlite", not(feature = "mysql"), not(feature = "postgres")))] {
+    pub use sqlite::PooledConnection;
+
     #[derive(EnvURL, PoolContext)]
     #[env_url(env_prefix = "DATABASE", default = "sqlite://./db.sqlite")]
     /// Static connection pool type
@@ -113,7 +119,7 @@ cfg_block! {
     }
 
     /// Get sqlite connection from pool. Use `DATABASE_URL` env variable to set connection url
-    pub fn get_connection() -> Result<sqlite::PooledConnection, PoolError> {
+    pub fn get_connection() -> Result<PooledConnection, PoolError> {
       <ConnectionPool as PoolContext>::get_connection()
     }
   }
