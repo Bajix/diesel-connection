@@ -2,7 +2,7 @@
 name = "derive-diesel-connection"
 authors = ["Thomas Sieverding <Thomas@bajix.com>"]
 edition = "2021"
-version = "4.0.0"
+version = "4.1.0"
 description = "Derives for diesel-connection"
 readme = "../../README.md"
 license = "MIT"
