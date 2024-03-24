@@ -1,8 +1,26 @@
 version: "3"
 
 tasks:
+  default:
+    cmds:
+      - task: check-postgress
+      - task: check-mysql
+      - task: check-sqlite
+
   doc:
     cmds:
       - cargo +nightly doc -p diesel-connection --all-features --open
     env:
       RUSTDOCFLAGS: --cfg docsrs
+
+  check-postgress:
+    cmds:
+      - cargo check -p diesel-connection
+
+  check-mysql:
+    cmds:
+      - cargo check -p diesel-connection --no-default-features --features mysql
+
+  check-sqlite:
+    cmds:
+      - cargo check -p diesel-connection --no-default-features --features sqlite
