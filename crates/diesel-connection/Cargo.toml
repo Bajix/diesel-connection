@@ -13,12 +13,12 @@ keywords = ["diesel", "r2d2", "postgres"]
 doctest = false
 
 [dependencies]
-cfg_block = "0.1.1"
+cfg_block = "0.2"
 derive-diesel-connection = { version = "4.0.0", path = "../derive-diesel-connection" }
-diesel = { version = "2", features = ["r2d2"] }
+diesel = { version = "2.1", features = ["r2d2"] }
 dotenvy = { version = "0.15", optional = true }
-env-url = "2.0.3"
-static_init = "1.0.3"
+env-url = "2.0.4"
+static_init = "1.0"
 
 [features]
 default = ["postgres"]

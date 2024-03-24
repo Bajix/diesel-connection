@@ -12,3 +12,4 @@ members = [
   "crates/diesel-connection",
   "crates/derive-diesel-connection",
 ]
+resolver = "2"
